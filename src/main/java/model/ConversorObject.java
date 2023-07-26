@@ -1,4 +1,4 @@
-package VO;
+package model;
 
 public abstract class ConversorObject {
     Integer valueA;
