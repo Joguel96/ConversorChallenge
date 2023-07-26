@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="250.0" prefWidth="400.0" stylesheets="@styles/styles.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.conversor.HomeController">
+   <children>
+      <VBox prefHeight="25.0" prefWidth="400.0">
+         <children>
+            <MenuBar maxWidth="1.7976931348623157E308">
+              <menus>
+                <Menu mnemonicParsing="false" text="Conversor">
+                  <items>
+                        <Menu mnemonicParsing="false" text="Moneda">
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="Peso (MXN) a Dolar Americano(Dlls)" />
+                          <MenuItem mnemonicParsing="false" text="Peso (MXN) a Euro (EUR)" />
+                              <MenuItem mnemonicParsing="false" text="Peso (MXN) a Libra Esternila (GBP)" />
+                              <MenuItem mnemonicParsing="false" text="Peso (MXN) a Yen Japones (JPY)" />
+                              <MenuItem mnemonicParsing="false" text="Peso (MXN) a Won Sur-coreano (KRW)" />
+                              <MenuItem mnemonicParsing="false" text="Dolar Americano(Dlls) a Peso (MXN)" />
+                              <MenuItem mnemonicParsing="false" text="Euro (EUR) a Peso (MXN)" />
+                              <MenuItem mnemonicParsing="false" text="Libra Esternila (GBP) a Peso (MXN)" />
+                              <MenuItem mnemonicParsing="false" text="Yen Japones (JPY) a Peso (MXN)" />
+                              <MenuItem mnemonicParsing="false" text="Won Sur-coreano (KRW) a Peso (MXN)" />
+                          </items>
+                        </Menu>
+                    <MenuItem mnemonicParsing="false" text="Longitud" />
+                        <MenuItem mnemonicParsing="false" text="Peso" />
+                    <MenuItem mnemonicParsing="false" text="Temperatura" />
+                        <MenuItem mnemonicParsing="false" text="Almacenamiento de datos" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Ayuda">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#showAbout" text="Acerca de" />
+                        <MenuItem mnemonicParsing="false" onAction="#showReadme" text="Readme" />
+                        <MenuItem mnemonicParsing="false" onAction="#cerrarAplicacion" text="Salir" />
+                     </items>
+                </Menu>
+              </menus>
+               <padding>
+                  <Insets left="2.0" top="1.0" />
+               </padding>
+            </MenuBar>
+         </children>
+      </VBox>
+      <VBox alignment="CENTER" prefHeight="212.0" prefWidth="400.0">
+         <children>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="TOP_LEFT" layoutX="14.0" layoutY="14.0" lineSpacing="1.0" text="Servicio de conversion">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font></Label>
+                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="185.0" layoutY="103.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" styleClass="boton-intercambio" />
+                  <Label fx:id="in1Label" layoutX="14.0" layoutY="89.0" text="Valor 1" />
+                  <TextField fx:id="input1" layoutX="14.0" layoutY="106.0">
+                     <tooltip>
+                        <Tooltip text="Inserte un valor numerico" />
+                     </tooltip>
+                  </TextField>
+                  <Label fx:id="in2Label" layoutX="237.0" layoutY="89.0" text="Valor 2" />
+                  <TextField fx:id="input2" layoutX="237.0" layoutY="106.0">
+                     <tooltip>
+                        <Tooltip text="Inserte un valor numerico" />
+                     </tooltip>
+                  </TextField>
+                  <Button layoutX="321.0" layoutY="161.0" mnemonicParsing="false" onMouseClicked="#conversion" text="Convertir" />
+                  <Button layoutX="249.0" layoutY="161.0" mnemonicParsing="false" onMouseClicked="#limpiarValores" text="Limpiar" />
+                  <Label alignment="TOP_LEFT" layoutX="14.0" layoutY="54.0" text="Valores a convertir:" textAlignment="JUSTIFY">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Label>
+                  <Label alignment="TOP_LEFT" layoutX="118.0" layoutY="46.0" textAlignment="JUSTIFY" />
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+      <VBox alignment="CENTER_LEFT" prefHeight="13.0" prefWidth="400.0" spacing="10.0" styleClass="vBox-barra-estado">
+         <children>
+            <TextField fx:id="barraDeEstado" editable="false" prefHeight="13.0" prefWidth="400.0" styleClass="vBox-barra-estado" text="">
+               <font>
+                  <Font size="10.0" />
+               </font></TextField>
+         </children>
+      </VBox>
+   </children>
+</VBox>

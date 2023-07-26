@@ -1,0 +1,5 @@
+{
+    "css.lint.vendorPrefix": "ignore",
+    "css.lint.unknownVendorSpecificProperties": "warning",
+    "java.configuration.updateBuildConfiguration": "automatic"
+}
