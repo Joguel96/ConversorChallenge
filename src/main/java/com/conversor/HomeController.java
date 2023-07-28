@@ -144,29 +144,52 @@ public class HomeController implements Initializable {
         Platform.exit();
     }
 
-    @FXML
-    private void showAbout() {
-        System.out.println("Acerca de");
-    }
-
+    
     @FXML
     private void limpiarValores() {
         inputNum.setText("");
     }
-
+    
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         homeController = this;
-
+        
         Date fechaActual = new Date();
         String fechaFormateada = fechaFormato.format(fechaActual);
         barraDeEstado.setText("Fecha actual: " + fechaFormateada);
         conversionService = new ConversionService();
-
+        
         for (OpcionesEnum conversion : OpcionesEnum.values()) {
             String textoConversion = conversion.getValor1() + " a " + conversion.getValor2();
             conversionesMap.put(textoConversion, conversion);
         }
+    }
+    
+    @FXML
+    private void showAbout() {
+        String acercaDeMensaje = "Bienvenido a Conversor Challenge G5!\n\n"
+                + "Autor: José Miguel Silva Castro\n"
+                + "Alias de GitHub: joguel\n"
+                + "Versión: 1.0\n\n"
+                + "Descripción:\n"
+                + "Conversor Challenge G5 es una aplicación de conversión versátil y fácil de usar, "
+                + "desarrollada como parte del desafío para la clase de Alura Latam. "
+                + "Esta aplicación te permite convertir diferentes unidades y datos en diversas categorías, "
+                + "incluyendo divisas, longitudes, peso, temperatura y almacenamiento.\n\n"
+                + "Características principales:\n"
+                + "- Conversión rápida y precisa entre diferentes unidades.\n"
+                + "- Soporte para divisas, longitudes, peso, temperatura y almacenamiento.\n"
+                + "- Interfaz gráfica amigable e intuitiva para una experiencia de usuario fluida.\n"
+                + "- Muestra el resultado de las conversiones con hasta dos decimales para mayor precisión.\n\n"
+                + "¡Esperamos que disfrutes usando Conversor Challenge G5 para tus necesidades de conversión diarias!\n\n"
+                + "¡Gracias por usar nuestra aplicación!";
+
+        Alert alerta = new Alert(AlertType.INFORMATION);
+        alerta.setTitle("Acerca de Conversor Challenge G5");
+        alerta.setHeaderText(null);
+        alerta.setContentText(acercaDeMensaje);
+        
+        alerta.showAndWait();
     }
 
 }
