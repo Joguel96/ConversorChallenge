@@ -66,13 +66,13 @@ public class HomeController implements Initializable {
         String valorString = inputNum.getText();
 
         if (validaServicio(menuItem)) {
-            Main.mostrarAlerta("Alerta", "Debes seleccionar un servicio de conversion primero",
+            Conversor.mostrarAlerta("Alerta", "Debes seleccionar un servicio de conversion primero",
                     AlertType.WARNING);
             return;
         }
 
         if (validaCampos(valorString)) {
-            Main.mostrarAlerta("Error", "El campo no puede ir vacio.",
+            Conversor.mostrarAlerta("Error", "El campo no puede ir vacio.",
                     AlertType.WARNING);
             return;
         }
@@ -81,7 +81,7 @@ public class HomeController implements Initializable {
         try {
             valorNum = Double.parseDouble(valorString);
         } catch (NumberFormatException e) {
-            Main.mostrarAlerta("Error", "El campo debe tener un valor numérico.", AlertType.WARNING);
+            Conversor.mostrarAlerta("Error", "El campo debe tener un valor numérico.", AlertType.WARNING);
             return;
         }
 
@@ -91,10 +91,10 @@ public class HomeController implements Initializable {
             double resultado = conversionService.getResultado(categoria, tipo, valorNum);
             showResultados(valorNum, resultado, tipoDeConversion);
         } catch (ValorInvalidoException e) {
-            Main.mostrarAlerta("Error", e.getMessage(), AlertType.ERROR);
+            Conversor.mostrarAlerta("Error", e.getMessage(), AlertType.ERROR);
         }
 
-        Alert alert = Main.mostrarAlerta("Confirmación", "¿Desea continuar con el servicio de conversion?",
+        Alert alert = Conversor.mostrarAlerta("Confirmación", "¿Desea continuar con el servicio de conversion?",
                 AlertType.CONFIRMATION);
         if (alert.getResult() == ButtonType.CANCEL) {
             cerrarAplicacion();
@@ -140,7 +140,7 @@ public class HomeController implements Initializable {
 
     @FXML
     private void cerrarAplicacion() {
-        Main.mostrarAlerta("Aviso", "Programa finalizado", AlertType.INFORMATION);
+        Conversor.mostrarAlerta("Aviso", "Programa finalizado", AlertType.INFORMATION);
         Platform.exit();
     }
 

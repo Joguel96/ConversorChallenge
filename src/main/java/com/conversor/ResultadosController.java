@@ -24,7 +24,7 @@ public class ResultadosController implements Initializable {
     @FXML
     private void cerrarPanel() {
         Stage stage = (Stage) resultado.getScene().getWindow();
-        Main.cerrarVentana(stage);
+        Conversor.cerrarVentana(stage);
     }
 
     @Override
