@@ -1,4 +1,4 @@
-package model;
+package com.conversor.model;
 
 import com.conversor.Main;
 

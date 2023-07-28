@@ -4,73 +4,119 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
+import com.conversor.model.CategoriaConversion;
+import com.conversor.model.OpcionesEnum;
+import com.conversor.model.ValorInvalidoException;
+import com.conversor.servicios.ConversionService;
+
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import model.ValorInvalidoException;
 
 public class HomeController implements Initializable {
 
     HomeController homeController;
 
     @FXML
-    private TextField
-            barraDeEstado,
-            input1,
-            input2;
+    private TextField barraDeEstado, inputNum;
 
     @FXML
-    private Label
-            in1Label,
-            in2Label;
+    private Label categoriaLabel, inputLabel;
 
     private SimpleDateFormat fechaFormato = new SimpleDateFormat("dd/MM/yyyy");
+    private Map<String, OpcionesEnum> conversionesMap = new HashMap<>();
+    private MenuItem menuItem;
+    private ConversionService conversionService;
+    private String tipoDeConversion;
+
+    @FXML
+    private void getTipoConversion(ActionEvent event) {
+        menuItem = (MenuItem) event.getSource();
+        Menu parentMenu = menuItem.getParentMenu();
+        tipoDeConversion = menuItem.getText();
+        categoriaLabel.setText(parentMenu.getText());
+
+        OpcionesEnum conversion = conversionesMap.get(tipoDeConversion);
+        if (conversion != null) {
+            inputLabel.setText(tipoDeConversion);
+        } else {
+            System.out.println("No se encontró la conversión para: " + tipoDeConversion);
+        }
+    }
 
     @FXML
     private void conversion() throws IOException, ValorInvalidoException {
-        String valor1 = input1.getText();
-        String valor2 = input2.getText();
+        String valorString = inputNum.getText();
 
-        if (validaCampos(valor1, valor2)) {
-            Main.mostrarAlerta("Error", "Ambos campos deben tener valores numéricos.", Alert.AlertType.ERROR);
+        if (validaServicio(menuItem)) {
+            Main.mostrarAlerta("Alerta", "Debes seleccionar un servicio de conversion primero",
+                    AlertType.WARNING);
+            return;
+        }
+
+        if (validaCampos(valorString)) {
+            Main.mostrarAlerta("Error", "El campo no puede ir vacio.",
+                    AlertType.WARNING);
+            return;
+        }
+
+        double valorNum;
+        try {
+            valorNum = Double.parseDouble(valorString);
+        } catch (NumberFormatException e) {
+            Main.mostrarAlerta("Error", "El campo debe tener un valor numérico.", AlertType.WARNING);
             return;
         }
 
         try {
-            double resultado = Double.parseDouble(valor1) + Double.parseDouble(valor2);
-            showResultados(resultado);
-        } catch (NumberFormatException | ValorInvalidoException e) {
-            throw new ValorInvalidoException("Ambos campos deben tener valores numéricos válidos.");
+            CategoriaConversion categoria = obtenerCategoria();
+            OpcionesEnum tipo = conversionesMap.get(menuItem.getText());
+            double resultado = conversionService.getResultado(categoria, tipo, valorNum);
+            showResultados(valorNum, resultado, tipoDeConversion);
+        } catch (ValorInvalidoException e) {
+            Main.mostrarAlerta("Error", e.getMessage(), AlertType.ERROR);
         }
 
         Alert alert = Main.mostrarAlerta("Confirmación", "¿Desea continuar con el servicio de conversion?",
-                Alert.AlertType.CONFIRMATION);
+                AlertType.CONFIRMATION);
         if (alert.getResult() == ButtonType.CANCEL) {
             cerrarAplicacion();
+
             return;
         }
 
     }
 
-    private void showResultados(double resultado) throws IOException, ValorInvalidoException {
+    private CategoriaConversion obtenerCategoria() {
+        String categoriaTexto = categoriaLabel.getText();
+        return CategoriaConversion.valueOf(categoriaTexto.toUpperCase());
+    }
+
+    private void showResultados(double valorNum, double resultado, String valor) throws IOException, ValorInvalidoException {
         Stage resultadosStage = new Stage();
         FXMLLoader loader = new FXMLLoader();
         VBox root = (VBox) loader.load(getClass().getResource("resultados.fxml").openStream());
 
         ResultadosController resultadosController = (ResultadosController) loader.getController();
 
-        resultadosController.getResultado(resultado);
+        resultadosController.getResultado(valorNum, resultado, valor);
 
         Scene scene = new Scene(root);
         resultadosStage.setTitle("Resultado Conversion");
@@ -84,19 +130,18 @@ public class HomeController implements Initializable {
 
     }
 
-    private boolean validaCampos(String input1, String input2) {
-        return input1.isEmpty() || input2.isEmpty();
+    private boolean validaCampos(String input1) {
+        return input1.isEmpty() || input1.trim().isEmpty();
+    }
+
+    private boolean validaServicio(MenuItem menuItem) {
+        return menuItem == null;
     }
 
     @FXML
     private void cerrarAplicacion() {
-        Main.mostrarAlerta("Aviso", "Programa finalizado", Alert.AlertType.INFORMATION);
+        Main.mostrarAlerta("Aviso", "Programa finalizado", AlertType.INFORMATION);
         Platform.exit();
-    }
-
-    @FXML
-    private void showReadme() {
-        System.out.println("readme");
     }
 
     @FXML
@@ -106,8 +151,7 @@ public class HomeController implements Initializable {
 
     @FXML
     private void limpiarValores() {
-        input1.setText("");
-        input2.setText("");
+        inputNum.setText("");
     }
 
     @Override
@@ -117,6 +161,12 @@ public class HomeController implements Initializable {
         Date fechaActual = new Date();
         String fechaFormateada = fechaFormato.format(fechaActual);
         barraDeEstado.setText("Fecha actual: " + fechaFormateada);
+        conversionService = new ConversionService();
+
+        for (OpcionesEnum conversion : OpcionesEnum.values()) {
+            String textoConversion = conversion.getValor1() + " a " + conversion.getValor2();
+            conversionesMap.put(textoConversion, conversion);
+        }
     }
 
 }

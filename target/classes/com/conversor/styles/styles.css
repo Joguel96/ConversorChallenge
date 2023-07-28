@@ -3,10 +3,3 @@
     -fx-border-color: gray;
     -fx-border-width: 1px 0 0 0;
 }
-
-.boton-intercambio {
-    -fx-background-image: url("../img/flechas.png");
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: 25 25;
-    -fx-background-position: center center;
-}

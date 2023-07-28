@@ -11,21 +11,18 @@ import javafx.stage.Stage;
 public class ResultadosController implements Initializable {
 
     ResultadosController resultadosController;
-    
-    @FXML
-    private Label
-    ValorA,
-    ValorB,
-    resultado;
 
     @FXML
-    public void getResultado(Number resultado){
-        System.out.println("el resultado es: " + resultado);
-        this.resultado.setText("el resultado es: " + resultado);
+    private Label tipoDeConversionLbl, resultado;
+
+    @FXML
+    public void getResultado(double valor, double resultado, String tipoDeConversion) {
+        this.tipoDeConversionLbl.setText("el resultado de " + valor + " " + tipoDeConversion +  ", es: ");
+        this.resultado.setText(String.format("%.2f", resultado));
     }
 
     @FXML
-    private void cerrarPanel(){
+    private void cerrarPanel() {
         Stage stage = (Stage) resultado.getScene().getWindow();
         Main.cerrarVentana(stage);
     }
